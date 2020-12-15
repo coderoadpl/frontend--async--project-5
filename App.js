@@ -9,6 +9,8 @@ class App {
         this.isLoading = false
         this.hasError = null
 
+        this.data = null
+
         this.init()
     }
 
@@ -32,6 +34,11 @@ class App {
         this.render()
     }
 
+    setData(data) {
+        this.data = data
+        this.render()
+    }
+
     fetchWeather() {
         return fetchData(
             `https://api.openweathermap.org/data/2.5/forecast?q=${this.query}&appid=${APPID}&units=metric`,
@@ -41,7 +48,7 @@ class App {
                 endCallback: () => this.endCallback(),
             }
         )
-            .then(console.log)
+            .then((data) => this.setData(data))
     }
 
     onInput(event) {
@@ -78,6 +85,10 @@ class App {
             this.container.appendChild(messageElement.render())
             return this.container
         }
+
+        const text = document.createTextNode(JSON.stringify(this.data))
+
+        this.container.appendChild(text)
 
         return this.container
     }
