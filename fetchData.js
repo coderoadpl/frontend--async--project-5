@@ -7,6 +7,12 @@ const fetchData = (url, options = {}) => {
 
     startCallback()
     return fetch(url)
+        .then((response) => {
+            if (response.status < 200 || response.status > 299) {
+                throw new Error(response.status)
+            }
+            return response
+        })
         .then((response) => response.json())
         .catch(catchCallback)
         .finally(endCallback)
